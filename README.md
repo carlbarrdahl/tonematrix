@@ -1,5 +1,5 @@
-ToneMatrix
+# ToneMatrix
 ==========
 
-Experiment with WebAudio API
+###### Experiment with WebAudio API
 http://carlbarrdahl.se/tm/
