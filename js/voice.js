@@ -13,7 +13,7 @@
 			this.osc.connect(this.envelope);
 			this.envelope.connect(tm.Synth.master);
 
-			// this.osc.type = this.osc.SAWTOOTH
+			// this.osc.type = this.osc.TRIANGLE
 			this.osc.frequency.setValueAtTime(this.note, 0);
 
 

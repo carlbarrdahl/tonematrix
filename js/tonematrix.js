@@ -47,6 +47,43 @@
 			if (extension.toString !== Object.prototype.toString) obj.toString = extension.toString;
 		}
 	};
+
+	tm.decode = function (in_s)
+	{
+		if (!in_s || !in_s.length)
+		{
+			console.warn('No array')
+			return false
+		}
+		var s = in_s.split('-');
+		var out_int, out_array = [];
+		var jj = parseInt(s[0], 36);
+		for (var i = 1, ii = s.length; i < ii; i++)
+		{
+			out_int = parseInt(s[i], 36);
+			out_array[i - 1] = [];
+			for (var j = 0; j < jj; j++)
+			{
+				out_array[i - 1].push((out_int >> j) & 1);
+			}
+		}
+		return out_array;
+	};
+
+	tm.encode = function (in_array)
+	{
+		var out_int, out_s = in_array[0].length.toString(36);
+		for (var i = 0, ii = in_array.length; i < ii; i++)
+		{
+			out_int = 0;
+			for (var j = 0, k = in_array[i], jj = k.length; j < jj; j++)
+			{
+				out_int |= k[j] << j;
+			}
+			out_s += '-' + out_int.toString(36);
+		}
+		return out_s;
+	};
 	tm.$ = document.getElementById.bind(document);
 	tm.$$ = document.querySelectorAll.bind(document);
 	Element.prototype.on = Element.prototype.addEventListener;

@@ -29,11 +29,19 @@
 			this.generateGrid();
 
 			this.startLoop();
+			this.events();
 		},
 
-		startLoop: function() {
+		startLoop: function ()
+		{
 			clearInterval(this.loop);
 			this.loop = setInterval(this.audioLoop.bind(this), 60 / this.BPM / 2 * 1000);
+		},
+
+		stopLoop: function ()
+		{
+			clearInterval(this.loop);
+			this.loop = null;
 		},
 
 		setScale: function (scale)
@@ -49,16 +57,41 @@
 			this.startLoop();
 		},
 
-		toggleNote: function (e)
+		toggleNote: function (e, state)
 		{
 			var row = e.target.getAttribute('data-row');
 			var column = e.target.getAttribute('data-column');
-			var note = this.grid[row][column];
+			var note = state !== undefined ? state : this.grid[row][column];
+			var action = note ? 'remove' : 'add';
+
 			this.grid[row][column] = +!note;
+			e.target.classList[action]('active');
 
-			e.target.classList.toggle('active');
+		},
 
-			localStorage.setItem('notes', JSON.stringify(this.grid));
+		handleEvent: function (e)
+		{
+			if (e.target.classList && e.target.classList.contains('note'))
+			{
+				if (e.type === 'mousedown')
+				{
+					this.dragging = true;
+					this.noteIsActive = e.target.classList.contains('active');
+				}
+				if (e.type === 'mousemove')
+				{
+					if (this.dragging)
+					{
+						this.toggleNote(e, this.noteIsActive);
+					}
+				}
+			}
+			if (e.type === 'mouseup')
+			{
+				this.dragging = false;
+				window.location.hash = tm.encode(this.grid);
+				localStorage.setItem('notes', tm.encode(this.grid));
+			}
 		},
 
 		audioLoop: function ()
@@ -92,10 +125,10 @@
 
 		generateGrid: function ()
 		{
-			var i = 0,
-				j, note;
-
-			var tmpGrid = JSON.parse(localStorage.getItem('notes')) || [];
+			var i = 0;
+			var j;
+			var note;
+			var tmpGrid = tm.decode(window.location.hash.slice(1) || localStorage.getItem('notes')) || [];
 
 			for (; i < this.ROWS; i++)
 			{
@@ -120,9 +153,16 @@
 					}
 				}
 			}
+		},
 
+		events: function ()
+		{
 			tm.$('tonematrix').on('click', this.toggleNote.bind(this), false);
-			console.log(this.grid);
+			tm.$('tonematrix').on('mousedown', this, false);
+			tm.$('tonematrix').on('mousemove', this, false);
+			window.addEventListener('mouseup', this, false);
+			window.addEventListener('blur', this.stopLoop.bind(this), false);
+			window.addEventListener('focus', this.startLoop.bind(this), false);
 		}
 	});
 
