@@ -59,14 +59,15 @@
 
 		toggleNote: function (e, state)
 		{
-			var row = e.target.getAttribute('data-row');
-			var column = e.target.getAttribute('data-column');
-			var note = state !== undefined ? state : this.grid[row][column];
-			var action = note ? 'remove' : 'add';
+			if(e.target.id != 'tonematrix') {
+				var row = e.target.getAttribute('data-row');
+				var column = e.target.getAttribute('data-column');
+				var note = state !== undefined ? state : this.grid[row][column];
+				var action = note ? 'remove' : 'add';
 
-			this.grid[row][column] = +!note;
-			e.target.classList[action]('active');
-
+				this.grid[row][column] = +!note;
+				e.target.classList[action]('active');
+			}
 		},
 
 		handleEvent: function (e)

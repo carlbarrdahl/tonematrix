@@ -38,10 +38,10 @@
 		{
 			tm.extend(this, opts);
 
-			Synth.master = this.context.createGainNode();
+			Synth.master = this.context.createGain();
 			Synth.master.gain.value = 0.3;
 
-			this.delay = this.context.createDelayNode();
+			this.delay = this.context.createDelay();
 			this.delay.delayTime.value = 0.25;
 			this.delay.connect(Synth.master);
 
