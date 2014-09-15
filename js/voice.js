@@ -28,7 +28,7 @@
 
 			this.envelope.gain.cancelScheduledValues(now);
 			this.envelope.gain.setValueAtTime(this.envelope.gain.value, now);
-			this.envelope.gain.setTargetValueAtTime(0.0, now, (this.release / 100));
+			this.envelope.gain.setTargetAtTime(0.0, now, (this.release / 100));
 
 			this.osc.stop(release);
 		},
@@ -40,7 +40,7 @@
 
 			this.envelope.gain.setValueAtTime(0.0, now);
 			this.envelope.gain.linearRampToValueAtTime(1.0, envAttackEnd);
-			this.envelope.gain.setTargetValueAtTime((this.sustain / 100.0), envAttackEnd, (this.decay / 100.0) + 0.001);
+			this.envelope.gain.setTargetAtTime((this.sustain / 100.0), envAttackEnd, (this.decay / 100.0) + 0.001);
 		}
 	});
 
